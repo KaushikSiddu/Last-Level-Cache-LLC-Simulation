@@ -4,7 +4,7 @@
 #include <sys/stat.h> // For checking if the file exists
 
 // Uncomment this line to enable compile-time debugging
-// #define ENABLE_DEBUG
+#define ENABLE_DEBUG
 
 #define DEFAULT_TRACE_FILE "default_trace.txt"
 
