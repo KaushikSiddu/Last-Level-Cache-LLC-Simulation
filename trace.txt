@@ -10,4 +10,3 @@
 8            # Clear cache and reset all state
 9            # Print contents and state of each valid cache line
 2 7FFFAFFF   # Read request from L1 instruction cache at address 0x7FFFFFFF
-12
