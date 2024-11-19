@@ -3,10 +3,10 @@
 #include <string.h>
 #include <sys/stat.h> // For checking if the file exists
 
-// Uncomment this line to enable compile-time debugging
 // #define ENABLE_DEBUG
 
 #define DEFAULT_TRACE_FILE "default_trace.txt"
+#define OUTPUT_FILE "parsed_output.txt" // Output file to store parsed data
 
 // Cache operation codes
 enum OperationCodes {
@@ -20,6 +20,46 @@ enum OperationCodes {
     CLEAR_CACHE = 8,
     PRINT_CACHE_STATE = 9
 };
+
+// Structure for decomposing an address
+typedef struct {
+    unsigned int byte_offset; // 6 LSB bits
+    unsigned int index;       // Next 14 bits
+    unsigned int tag;         // Remaining 12 bits
+} CacheAddress;
+
+// Structure to hold cache-specific metadata
+typedef struct {
+    int valid;                // Valid bit (1 if valid, 0 otherwise)
+    int dirty;                // Dirty bit (1 if modified, 0 otherwise)
+    unsigned int pseudo_LRU;  // 15 bits for pseudo-LRU (0 to 0x7FFF)
+} CacheMetadata;
+
+// Structure to hold a trace entry
+typedef struct {
+    int operation_code;       // Operation code from the trace file
+    unsigned int address;     // Original 32-bit address
+    CacheAddress parsed_addr; // Decomposed address fields
+    CacheMetadata metadata;   // Metadata for cache entry
+} TraceEntry;
+
+// Function to decompose a 32-bit address
+CacheAddress decompose_address(unsigned int address) {
+    CacheAddress parsed;
+    parsed.byte_offset = address & 0x3F;           // 6 LSB bits (0b111111 or 0x3F)
+    parsed.index = (address >> 6) & 0x3FFF;        // Next 14 bits (0x3FFF)
+    parsed.tag = (address >> 20) & 0xFFF;          // Remaining 12 bits
+    return parsed;
+}
+
+// Function to initialize cache metadata
+CacheMetadata initialize_cache_metadata() {
+    CacheMetadata metadata;
+    metadata.valid = 0;                            // Invalid by default
+    metadata.dirty = 0;                            // Clean by default
+    metadata.pseudo_LRU = 0x7FFF;                  // All bits set (example starting state)
+    return metadata;
+}
 
 // Function to display operation name based on operation code
 const char *get_operation_name(int code) {
@@ -37,56 +77,57 @@ const char *get_operation_name(int code) {
     }
 }
 
-// Function to parse a line of the trace file
-int parse_trace_line(const char *line, int debug) {
-    int operation_code;
-    unsigned int address;
+// Function to parse a trace line
+int parse_trace_line(const char *line, int debug, TraceEntry *entry, FILE *output_file) {
     int items_parsed;
+    unsigned int address;
 
     // Skip empty lines
     if (line[0] == '\n' || line[0] == '\0') {
-        return 0;  // Return success for empty lines, skipping further processing
+        return 0;  // Return success for empty lines
     }
 
-    // Parse the line with an optional address
-    items_parsed = sscanf(line, "%d %x", &operation_code, &address);
+    // Parse the line for operation code and address
+    items_parsed = sscanf(line, "%d %x", &entry->operation_code, &address);
 
-    // Check if parsing failed completely (no operation code found)
+    // Ensure we have at least the operation code
     if (items_parsed == 0) {
         fprintf(stderr, "Invalid format in line: '%s'\n", line);
         return -1;
     }
 
-    // Handle commands that don’t require an address (operation codes 8 and 9)
-    if (operation_code == 8 || operation_code == 9) {
-        if (items_parsed == 1) {  // Only operation code was parsed, no address needed
-            #ifdef ENABLE_DEBUG
-            if (debug) {
-                printf("Parsed line: Operation=%s (code %d), No address required\n",
-                       get_operation_name(operation_code), operation_code);
-            }
-            #endif
-            return 0;
-        } else {
-            fprintf(stderr, "Unexpected address for operation %d in line: '%s'\n", operation_code, line);
-            return -1;
-        }
-    }
-
-    // Handle commands that require both an operation code and an address
+    // Handle commands that require an address
     if (items_parsed == 2) {
-        #ifdef ENABLE_DEBUG
-        if (debug) {
-            printf("Parsed line: Operation=%s (code %d), Address=0x%X\n",
-                   get_operation_name(operation_code), operation_code, address);
-        }
-        #endif
-        return 0;
+        entry->address = address;
+        entry->parsed_addr = decompose_address(address);
+        entry->metadata = initialize_cache_metadata(); // Initialize metadata
+    } else {
+        entry->address = 0;
+        memset(&entry->parsed_addr, 0, sizeof(CacheAddress)); // Clear parsed address
+        entry->metadata = initialize_cache_metadata();       // Initialize metadata
     }
 
-    // If we reach here, it means we have an invalid format
-    fprintf(stderr, "Invalid format in line: '%s'\n", line);
-    return -1;
+    // Write parsed data to the output file
+    fprintf(output_file, "Operation: %s (code %d), Address: 0x%08X\n",
+            get_operation_name(entry->operation_code), entry->operation_code, entry->address);
+    fprintf(output_file, "  Decomposed Address: Byte Offset=0x%X, Index=0x%X, Tag=0x%X\n",
+            entry->parsed_addr.byte_offset, entry->parsed_addr.index, entry->parsed_addr.tag);
+    fprintf(output_file, "  Metadata: Valid=%d, Dirty=%d, Pseudo-LRU=0x%X\n\n",
+            entry->metadata.valid, entry->metadata.dirty, entry->metadata.pseudo_LRU);
+
+    // Debug output if enabled
+    #ifdef ENABLE_DEBUG
+    if (debug) {
+        printf("Parsed line: Operation=%s (code %d), Address=0x%08X\n",
+               get_operation_name(entry->operation_code), entry->operation_code, entry->address);
+        printf("  Decomposed Address: Byte Offset=0x%X, Index=0x%X, Tag=0x%X\n",
+               entry->parsed_addr.byte_offset, entry->parsed_addr.index, entry->parsed_addr.tag);
+        printf("  Metadata: Valid=%d, Dirty=%d, Pseudo-LRU=0x%X\n",
+               entry->metadata.valid, entry->metadata.dirty, entry->metadata.pseudo_LRU);
+    }
+    #endif
+
+    return 0;
 }
 
 // Function to read and parse the trace file
@@ -97,16 +138,26 @@ void read_trace_file(const char *filename, int debug) {
         return;
     }
 
+    FILE *output_file = fopen(OUTPUT_FILE, "w");
+    if (!output_file) {
+        perror("Error creating output file");
+        fclose(file);
+        return;
+    }
+
     char line[256];
     int line_number = 0;
+    TraceEntry entry;
     while (fgets(line, sizeof(line), file)) {
         line_number++;
-        if (parse_trace_line(line, debug) != 0) {
+        if (parse_trace_line(line, debug, &entry, output_file) != 0) {
             fprintf(stderr, "Error parsing line %d: %s\n", line_number, line);
         }
     }
 
     fclose(file);
+    fclose(output_file);
+    printf("Parsed output saved to '%s'\n", OUTPUT_FILE);
 }
 
 int main(int argc, char *argv[]) {
