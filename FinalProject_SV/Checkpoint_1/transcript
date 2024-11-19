@@ -1,0 +1,49 @@
+# vsim -c trace_parser -do "run -all" "+debug=1" "+file=my_trace.txt" 
+# Start time: 15:22:24 on Nov 18,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# Loading sv_std.std
+# Loading work.trace_parser(fast)
+# run -all
+# Using file: my_trace.txt
+# Starting trace parsing...
+# Line 1: Operation=0, Address=0x408ed4
+# Parsed line: Operation=Read request from L1 data cache (code 0), Address=0x00408ed4
+# Line 2: Operation=1, Address=10019d88
+# Parsed line: Operation=Write request from L1 data cache (code 1), Address=0x10019d88
+# Line 3: Operation=2, Address=0x408ed8
+# Parsed line: Operation=Read request from L1 instruction cache (code 2), Address=0x00408ed8
+# Line 4: Operation=3, Address=10019d90
+# Parsed line: Operation=Snooped read request (code 3), Address=0x10019d90
+# Line 5: Operation=4, Address=2001abcd
+# Parsed line: Operation=Snooped write request (code 4), Address=0x2001abcd
+# Line 6: Operation=5, Address=0x408edc
+# Parsed line: Operation=Snooped read with intent to modify (code 5), Address=0x00408edc
+# Line 7: Operation=6, Address=300c0ffe
+# Parsed line: Operation=Snooped invalidate command (code 6), Address=0x300c0ffe
+# Line 8: Operation=0, Address=0x500fe5
+# Parsed line: Operation=Read request from L1 data cache (code 0), Address=0x00500fe5
+# Line 9: Operation=1, Address=600badf0
+# Parsed line: Operation=Write request from L1 data cache (code 1), Address=0x600badf0
+# Line 10: Operation=8, Address=9
+# Parsed line: Operation=Clear cache and reset state (code 8), No address required
+# Line 11: Operation=2, Address=7fffafff
+# Parsed line: Operation=Read request from L1 instruction cache (code 2), Address=0x7fffafff
+# Trace parsing completed.
+# ** Note: $finish    : trace_parser.sv(109)
+#    Time: 0 ns  Iteration: 0  Instance: /trace_parser
+# End time: 15:22:26 on Nov 18,2024, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0

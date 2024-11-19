@@ -1,0 +1,315 @@
+# //  Questa Sim-64
+# //  Version 2021.3_1 linux_x86_64 Aug 15 2021
+# //
+# //  Copyright 1991-2021 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  QuestaSim and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# vsim gui 
+# Start time: 15:59:01 on Nov 18,2024
+# ** Error (suppressible): (vsim-19) Failed to access library 'work' at "work".
+# No such file or directory. (errno = ENOENT)
+# Error loading design
+# End time: 15:59:02 on Nov 18,2024, Elapsed time: 0:00:01
+# Errors: 1, Warnings: 0
+# Loading project final
+# Compile of cache.sv failed with 2 errors.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 1 failed with 2 errors.
+# Break key hit
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:02:19 on Nov 18,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Error: Invalid line in trace file.
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(63)
+#    Time: 15 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 63
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:08:36 on Nov 18,2024, Elapsed time: 0:06:17
+# Errors: 0, Warnings: 7
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:08:36 on Nov 18,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Error: Unsupported operation 2 in trace file.
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(78)
+#    Time: 25 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 78
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:14:30 on Nov 18,2024, Elapsed time: 0:05:54
+# Errors: 0, Warnings: 2
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:14:30 on Nov 18,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Read operation: Address = 10019d94
+# Write operation: Address = 10019d88
+# Error: Unsupported operation 2 in trace file.
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(81)
+#    Time: 25 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 81
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:18:53 on Nov 18,2024, Elapsed time: 0:04:23
+# Errors: 0, Warnings: 2
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:18:53 on Nov 18,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(64): (vopt-7063) Failed to find 'cache_read' in hierarchical name 'uut.cache_read'.
+#         Region: cache_tb
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(72): (vopt-7063) Failed to find 'cache_write' in hierarchical name 'uut.cache_write'.
+#         Region: cache_tb
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(80): (vopt-7063) Failed to find 'cache_read_instruction' in hierarchical name 'uut.cache_read_instruction'.
+#         Region: cache_tb
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(88): (vopt-7063) Failed to find 'snoop_read' in hierarchical name 'uut.snoop_read'.
+#         Region: cache_tb
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(96): (vopt-7063) Failed to find 'snoop_write' in hierarchical name 'uut.snoop_write'.
+#         Region: cache_tb
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(104): (vopt-7063) Failed to find 'snoop_read_intent' in hierarchical name 'uut.snoop_read_intent'.
+#         Region: cache_tb
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(112): (vopt-7063) Failed to find 'snoop_invalidate' in hierarchical name 'uut.snoop_invalidate'.
+#         Region: cache_tb
+# ** Error (suppressible): /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(119): (vopt-7063) Failed to find 'print_cache_contents' in hierarchical name 'uut.print_cache_contents'.
+#         Region: cache_tb
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=8, Warnings=0.
+# Error loading design
+# End time: 16:18:54 on Nov 18,2024, Elapsed time: 0:00:01
+# Errors: 8, Warnings: 1
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:19:43 on Nov 18,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Read operation: Address = 10019d94
+# Write operation: Address = 10019d88
+# Error: Unsupported operation 2 in trace file.
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(81)
+#    Time: 25 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 81
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:24:42 on Nov 18,2024, Elapsed time: 0:04:59
+# Errors: 0, Warnings: 3
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:24:42 on Nov 18,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Read operation: Address = 10019d94
+# Write operation: Address = 10019d88
+# Read operation: Address = 00408ed8
+# Write operation: Address = 00408ed4
+# Read operation: Address = 004098b4
+# Write operation: Address = 004090c4
+# Write operation: Address = 004050c4
+# 
+# Final Cache Statistics:
+#   Reads: 3
+#   Writes: 3
+#   Hits: 0
+#   Misses: 6
+#   Hit Ratio: 0.00%
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(100)
+#    Time: 75 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 100
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:26:29 on Nov 18,2024, Elapsed time: 0:01:47
+# Errors: 0, Warnings: 2
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:26:29 on Nov 18,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Read operation: Address = 10019d94
+# Write operation: Address = 10019d88
+# Read operation: Address = 00408ed8
+# Write operation: Address = 00408ed4
+# Read operation: Address = 004098b4
+# Write operation: Address = 004090c4
+# Write operation: Address = 004050c4
+# Write operation: Address = 004050c4
+# 
+# Final Cache Statistics:
+#   Reads: 3
+#   Writes: 4
+#   Hits: 0
+#   Misses: 7
+#   Hit Ratio: 0.00%
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(100)
+#    Time: 85 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 100
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:28:39 on Nov 18,2024, Elapsed time: 0:02:10
+# Errors: 0, Warnings: 2
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:28:39 on Nov 18,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Read operation: Address = 10019d94
+# Write operation: Address = 10019d88
+# Read operation: Address = 00408ed8
+# Write operation: Address = 00408ed4
+# Read operation: Address = 004098b4
+# Write operation: Address = 004090c4
+# Write operation: Address = 004050c4
+# Write operation: Address = 004050c4
+# Read operation: Address = 00408ed8
+# 
+# Final Cache Statistics:
+#   Reads: 3
+#   Writes: 5
+#   Hits: 0
+#   Misses: 8
+#   Hit Ratio: 0.00%
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(100)
+#    Time: 95 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 100
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:44:54 on Nov 18,2024, Elapsed time: 0:16:15
+# Errors: 0, Warnings: 2
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:44:54 on Nov 18,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Read operation: Address = 10019d94
+# Address: 10019d94, Tag: 100, Index: 0676, Operation: 00, Hit: x, Miss: x
+# Write operation: Address = 10019d88
+# Address: 10019d88, Tag: 100, Index: 0676, Operation: 01, Hit: 0, Miss: 1
+# Read operation: Address = 00408ed8
+# Address: 00408ed8, Tag: 004, Index: 023b, Operation: 00, Hit: 0, Miss: 1
+# Write operation: Address = 00408ed4
+# Address: 00408ed4, Tag: 004, Index: 023b, Operation: 01, Hit: 0, Miss: 1
+# Read operation: Address = 004098b4
+# Address: 004098b4, Tag: 004, Index: 0262, Operation: 00, Hit: 0, Miss: 1
+# Write operation: Address = 004090c4
+# Address: 004090c4, Tag: 004, Index: 0243, Operation: 01, Hit: 0, Miss: 1
+# Write operation: Address = 004050c4
+# Address: 004050c4, Tag: 004, Index: 0143, Operation: 01, Hit: 0, Miss: 1
+# Write operation: Address = 004050c4
+# Address: 004050c4, Tag: 004, Index: 0143, Operation: 01, Hit: 0, Miss: 1
+# Read operation: Address = 00408ed8
+# Address: 00408ed8, Tag: 004, Index: 023b, Operation: 00, Hit: 0, Miss: 1
+# 
+# Final Cache Statistics:
+#   Reads: 3
+#   Writes: 5
+#   Hits: 0
+#   Misses: 8
+#   Hit Ratio: 0.00%
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(100)
+#    Time: 95 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 100
+# Compile of cache.sv was successful.
+# Compile of cache_tb.sv was successful.
+# 2 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cache_tb
+# End time: 16:55:05 on Nov 18,2024, Elapsed time: 0:10:11
+# Errors: 0, Warnings: 2
+# vsim -voptargs="+acc" work.cache_tb 
+# Start time: 16:55:05 on Nov 18,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading sv_std.std
+# Loading work.cache_tb(fast)
+# Loading work.cache(fast)
+run -all
+# Read operation: Address = 10019d94
+# Address: 10019d94, Tag: 100, Index: 0676, Operation: 00, Hit: x, Miss: x
+# Write operation: Address = 10019d88
+# Address: 10019d88, Tag: 100, Index: 0676, Operation: 01, Hit: 0, Miss: 1
+# Read operation: Address = 00408ed8
+# Address: 00408ed8, Tag: 004, Index: 023b, Operation: 00, Hit: 0, Miss: 1
+# Read operation: Address = 00408ed8
+# Address: 00408ed8, Tag: 004, Index: 023b, Operation: 00, Hit: 0, Miss: 1
+# Write operation: Address = 00408ed4
+# Address: 00408ed4, Tag: 004, Index: 023b, Operation: 01, Hit: 0, Miss: 1
+# Read operation: Address = 004098b4
+# Address: 004098b4, Tag: 004, Index: 0262, Operation: 00, Hit: 0, Miss: 1
+# Write operation: Address = 004090c4
+# Address: 004090c4, Tag: 004, Index: 0243, Operation: 01, Hit: 0, Miss: 1
+# Write operation: Address = 004050c4
+# Address: 004050c4, Tag: 004, Index: 0143, Operation: 01, Hit: 0, Miss: 1
+# Write operation: Address = 004050c4
+# Address: 004050c4, Tag: 004, Index: 0143, Operation: 01, Hit: 0, Miss: 1
+# Read operation: Address = 00408ed8
+# Address: 00408ed8, Tag: 004, Index: 023b, Operation: 00, Hit: 0, Miss: 1
+# 
+# Final Cache Statistics:
+#   Reads: 4
+#   Writes: 5
+#   Hits: 0
+#   Misses: 9
+#   Hit Ratio: 0.00%
+# ** Note: $finish    : /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv(100)
+#    Time: 105 ns  Iteration: 1  Instance: /cache_tb
+# 1
+# Break in Module cache_tb at /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/cache_tb.sv line 100
+quit
+# Project file /u/jogeshp/MSD_FinalProject/Group#6_MSD_FinalProject/Checkpoint_2/final.mpf is write protected, data cannot be saved.
+# Unable to save project.
+# End time: 00:46:30 on Nov 19,2024, Elapsed time: 7:51:25
+# Errors: 0, Warnings: 0
