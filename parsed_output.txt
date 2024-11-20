@@ -1,0 +1,48 @@
+Operation: Read request from L1 data cache (code 0), Address: 0x0736ABDC
+  Decomposed Address: Byte Offset=0x1C, Index=0x1AAF, Tag=0x73
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Write request from L1 data cache (code 1), Address: 0x010AAD58
+  Decomposed Address: Byte Offset=0x18, Index=0x2AB5, Tag=0x10
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Read request from L1 instruction cache (code 2), Address: 0x408ECCA0
+  Decomposed Address: Byte Offset=0x20, Index=0x3B32, Tag=0x408
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Snooped read request (code 3), Address: 0x100199AA
+  Decomposed Address: Byte Offset=0x2A, Index=0x666, Tag=0x100
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Snooped write request (code 4), Address: 0x020074AB
+  Decomposed Address: Byte Offset=0x2B, Index=0x1D2, Tag=0x20
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Snooped read with intent to modify (code 5), Address: 0x00408EDC
+  Decomposed Address: Byte Offset=0x1C, Index=0x23B, Tag=0x4
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Snooped invalidate command (code 6), Address: 0x00300C0E
+  Decomposed Address: Byte Offset=0xE, Index=0x30, Tag=0x3
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Read request from L1 data cache (code 0), Address: 0x0050AFE5
+  Decomposed Address: Byte Offset=0x25, Index=0x2BF, Tag=0x5
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Write request from L1 data cache (code 1), Address: 0x00600DFD
+  Decomposed Address: Byte Offset=0x3D, Index=0x37, Tag=0x6
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Clear cache and reset state (code 8), Address: 0x00000000
+  Decomposed Address: Byte Offset=0x0, Index=0x0, Tag=0x0
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Print contents and state of each valid cache line (code 9), Address: 0x00000000
+  Decomposed Address: Byte Offset=0x0, Index=0x0, Tag=0x0
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+
+Operation: Read request from L1 instruction cache (code 2), Address: 0x7FA64EFF
+  Decomposed Address: Byte Offset=0x3F, Index=0x193B, Tag=0x7FA
+  Metadata: Valid=0, Dirty=0, Pseudo-LRU=0x7FFF
+

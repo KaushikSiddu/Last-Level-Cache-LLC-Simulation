@@ -3,7 +3,7 @@
 #include <string.h>
 #include <sys/stat.h> // For checking if the file exists
 
-// #define ENABLE_DEBUG
+//#define ENABLE_DEBUG
 
 #define DEFAULT_TRACE_FILE "default_trace.txt"
 #define OUTPUT_FILE "parsed_output.txt" // Output file to store parsed data
