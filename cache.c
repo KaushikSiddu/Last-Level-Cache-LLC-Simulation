@@ -24,6 +24,11 @@ CacheMetadata initialize_cache_metadata() {
     return metadata;
 }
 
+// Function to initialize the PLRU tree for an index
+void initialize_plru_tree(CacheIndex *index) {
+    index->pseudo_LRU = 0; // Initialize all 15 bits to 0 (empty tree)
+}
+
 // Function to initialize cache (all lines are invalid by default)
 void initialize_cache() {
     int i,j;
@@ -32,9 +37,10 @@ void initialize_cache() {
             cache[i].lines[j].tag = 0; // Initialize the tag to 0
             cache[i].lines[j].metadata = initialize_cache_metadata(); // Initialize metadata
         }
-        cache[i].pseudo_LRU = 0x7FFF; // Set all pseudo-LRU bits for the index (15 bits, 0x7FFF)
+        initialize_plru_tree(&cache[i]); // Initialize the PLRU tree
     }
 }
+
 
 // Function to get a string representation of the MESI state
 const char *get_mesi_state_name(MESIState state) {
@@ -63,37 +69,75 @@ const char *get_operation_name(int code) {
     }
 }
 
+// Function to update the PLRU tree after accessing a specific way (hit or insertion)
+void update_plru_tree(unsigned short *pseudo_LRU, int way) {
+    int node = 0; // Start at the root of the tree
+    int depth = 0;
+    for (; depth < 4; depth++) {
+        int bit_index = node; // Current bit index in the PLRU array
+        int direction = (way & (1 << (3 - depth))) ? 1 : 0; // Check the bit of 'way' (3 MSB)
 
-// Function to perform the read operation (Operation Code 0)
+        (*pseudo_LRU) &= ~(1 << bit_index); // Clear the bit
+        (*pseudo_LRU) |= (direction << bit_index); // Set the bit to the current direction
+
+        // Move to the next node in the tree
+        node = 2 * node + 1 + direction;
+    }
+}
+
+// Function to find the way to evict using the PLRU tree
+int find_eviction_way(unsigned short pseudo_LRU) {
+    int node = 0; // Start at the root of the tree
+    int depth = 0;
+    for (; depth < 4; depth++) {
+        int bit_index = node; // Current bit index in the PLRU array
+        int direction = (pseudo_LRU & (1 << bit_index)) ? 1 : 0; // Check the direction bit
+
+        // Move to the next node in the tree
+        node = 2 * node + 1 + direction;
+    }
+
+    return node - 15; // Subtract 15 to convert to the way number (leaf index)
+}
+
 void handle_read_operation(TraceEntry *entry) {
-    // Decompose the address into its components
     unsigned int index = entry->parsed_addr.index;
     unsigned int tag = entry->parsed_addr.tag;
 
-    // Access the cache line at the given index
-    CacheIndex *cache_index = &cache[index];
-
-    bool hit = false;  // Flag to indicate whether it's a hit or miss
-    unsigned int i;
-
-    // Check each line in the index for a matching tag
+    CacheIndex *current_index = &cache[index];
+    int hit = 0;
+    int i;
+    // Check for a hit
     for (i = 0; i < NUM_LINES_PER_INDEX; i++) {
-        CacheLine *cache_line = &cache_index->lines[i];
+        if (current_index->lines[i].metadata.valid && current_index->lines[i].tag == tag) {
+            hit = 1;
 
-        if (cache_line->metadata.valid == 1 && cache_line->tag == tag) {
-            // If the line is valid and the tag matches, it's a hit
-            hit = true;
+            // Update the PLRU tree for this index (MRU update)
+            update_plru_tree(&current_index->pseudo_LRU, i);
+
+            printf("Cache Hit: Address 0x%08X (Index: 0x%X, Tag: 0x%X, Way: %d)\n",
+                   entry->address, index, tag, i);
             break;
         }
     }
 
-    // Output the result of the cache operation (hit or miss)
-    if (hit) {
-        printf("Cache Hit: Address 0x%08X (Index: 0x%X, Tag: 0x%X)\n",
-               entry->address, index, tag);
-    } else {
+    if (!hit) {
+        // Cache miss
         printf("Cache Miss: Address 0x%08X (Index: 0x%X, Tag: 0x%X)\n",
                entry->address, index, tag);
+
+        // Find a way to evict using the PLRU tree
+        int eviction_way = find_eviction_way(current_index->pseudo_LRU);
+
+        // Evict the cache line
+        printf("Evicting Way: %d (Tag: 0x%X)\n", eviction_way, current_index->lines[eviction_way].tag);
+        current_index->lines[eviction_way].tag = tag;
+        current_index->lines[eviction_way].metadata = initialize_cache_metadata();
+        current_index->lines[eviction_way].metadata.valid = 1;
+
+        // Update the PLRU tree after inserting the new tag
+        update_plru_tree(&current_index->pseudo_LRU, eviction_way);
     }
 }
+
 
