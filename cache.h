@@ -5,6 +5,7 @@
 #define NUM_LINES_PER_INDEX 16
 #include <stdbool.h>
 
+
 #define READ 1         /* Bus Read */
 #define WRITE 2        /* Bus Write */
 #define INVALIDATE 3   /* Bus Invalidate */
@@ -63,6 +64,7 @@ typedef struct {
     CacheMetadata metadata;   // Metadata for cache entry (valid, dirty, MESI state)
 } TraceEntry;
 
+
 // Bus message types
 typedef enum {
     BUS_READ,
@@ -75,10 +77,12 @@ typedef enum {
 const char *get_operation_name(int code);
 const char *get_mesi_state_name(MESIState state);
 void print_summary();
+
 CacheAddress decompose_address(unsigned int address);
 CacheMetadata initialize_cache_metadata();
 void initialize_cache();
 extern CacheIndex cache[NUM_INDEXES];
+
 void BusOperation(int BusOp, unsigned int Address, int *SnoopResult);
 int GetSnoopResult(unsigned int Address);
 void PutSnoopResult(unsigned int Address, int SnoopResult);
@@ -89,6 +93,7 @@ void handle_instruction_cache_read(TraceEntry *entry);
 void handle_snooped_read_request(TraceEntry *entry);
 void handle_snooped_write_request(TraceEntry *entry);
 void handle_snooped_rwim_request(TraceEntry *entry);
+
 
 
 #endif // CACHE_H

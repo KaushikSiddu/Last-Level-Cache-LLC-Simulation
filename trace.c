@@ -17,6 +17,7 @@ const char *get_operation_name(int code) {
         default: return "Unknown operation";
     }
 }
+
 // Function to parse a trace line
 int parse_trace_line(const char *line, int debug, TraceEntry *entry, FILE *output_file) {
     int items_parsed;

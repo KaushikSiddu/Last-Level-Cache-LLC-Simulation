@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
 
     if (argc > 2) {
         filename = argv[2];
+
     }
 
     // Check if the file exists
@@ -47,10 +48,12 @@ int main(int argc, char *argv[]) {
     initialize_cache();
 
     // Read and parse the trace file
+
     read_trace_file(filename);
 
     // Print summary statistics
     print_summary();
+
 
     return 0;
 }

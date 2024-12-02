@@ -32,4 +32,3 @@ Operation: Print contents and state of each valid cache line (code 9), Address: 
   Decomposed Address: Byte Offset=0x10, Index=0x2EB, Tag=0xBAD
   Metadata: Valid=0, Dirty=0, MESI State=INVALID
   Index Pseudo-LRU: 0x0
-

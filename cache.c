@@ -1,7 +1,6 @@
 #include "cache.h"
 #include <stdio.h>
 
-
 void print_summary() {
     // Example summary (replace with actual statistics)
     printf("Simulation Summary:\n");
@@ -35,6 +34,7 @@ CacheMetadata initialize_cache_metadata() {
     return metadata;
 }
 
+
 const char *get_mesi_state_name(MESIState state) {
     switch (state) {
         case INVALID: return "INVALID";
@@ -44,6 +44,7 @@ const char *get_mesi_state_name(MESIState state) {
         default: return "UNKNOWN";
     }
 }
+
 // Function to initialize the PLRU tree for an index
 void initialize_plru_tree(CacheIndex *index) {
     index->pseudo_LRU = 0; // Initialize all 15 bits to 0 (empty tree)
@@ -59,6 +60,7 @@ void initialize_cache() {
         }
         initialize_plru_tree(&cache[i]); // Initialize the PLRU tree
 
+
         for (j = 0; j < NUM_LINES_PER_INDEX; j++) {
             instruction_cache[i].lines[j].tag = 0;
             instruction_cache[i].lines[j].metadata = initialize_cache_metadata();
@@ -70,6 +72,7 @@ void initialize_cache() {
 // Function to update the PLRU tree after accessing a specific way (hit or insertion)
 void update_plru_tree(unsigned short *pseudo_LRU, int way) {
     int node = 0; // Start at the root of the tree
+
     int depth;
     for (depth = 0; depth < 4; depth++) {
         int bit_index = node; // Current bit index in the PLRU array
@@ -97,6 +100,7 @@ int find_eviction_way(unsigned short pseudo_LRU) {
 
     return node - 15; // Subtract 15 to convert to the way number (leaf index)
 }
+
 
 // Simulate the reporting of snoop results by other caches
 int GetSnoopResult(unsigned int Address) {
@@ -249,6 +253,7 @@ void handle_write_operation(TraceEntry *entry) {
     for (i = 0; i < NUM_LINES_PER_INDEX; i++) {
         if (cache_index->lines[i].metadata.valid && cache_index->lines[i].tag == tag) {
             hit = i;
+
             break;
         }
     }
@@ -511,4 +516,5 @@ void handle_snooped_rwim_request(TraceEntry *entry) {
         printf("Snooped RWIM: Line not present in cache. No action needed.\n");
     }
 }
+
 

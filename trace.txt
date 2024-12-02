@@ -4,9 +4,10 @@
 3 10019D90   # Snooped read request at address 0x10019D90
 4 2001ABCD   # Snooped write request at address 0x2001ABCD
 5 408EDC     # Snooped read with intent to modify at address 0x408EDC
-6 300C0FFEE  # Snooped invalidate command at address 0x300C0FFEE
+6 300C0FEE  # Snooped invalidate command at address 0x300C0FFEE
 0 500FE5     # Read request from L1 data cache at address 0x500FE5
-1 600BADF00D # Write request from L1 data cache at address 0x600BADF00D
+1 600BAD0D # Write request from L1 data cache at address 0x600BADF00D
 8            # Clear cache and reset all state
 9            # Print contents and state of each valid cache line
 2 7FFFAFFF   # Read request from L1 instruction cache at address 0x7FFFFFFF
+
