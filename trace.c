@@ -3,6 +3,21 @@
 #include <stdio.h>
 #include <string.h>
 
+const char *get_operation_name(int code) {
+    switch (code) {
+        case 0: return "Read request from L1 data cache";
+        case 1: return "Write request from L1 data cache";
+        case 2: return "Read request from L1 instruction cache";
+        case 3: return "Snooped read request";
+        case 4: return "Snooped write request";
+        case 5: return "Snooped read with intent to modify";
+        case 6: return "Snooped invalidate command";
+        case 8: return "Clear cache and reset state";
+        case 9: return "Print contents and state of each valid cache line";
+        default: return "Unknown operation";
+    }
+}
+
 // Function to parse a trace line
 int parse_trace_line(const char *line, int debug, TraceEntry *entry, FILE *output_file) {
     int items_parsed;

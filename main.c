@@ -5,24 +5,36 @@
 #include <sys/stat.h> // For checking if the file exists
 #include "cache.h"
 
+#define DEFAULT_TRACE_FILE "rwims.din"
 
-#define DEFAULT_TRACE_FILE "default_trace.txt"
+// Global mode variable
+int Mode = 0; // 0 = silent, 1 = normal
+
+void print_usage() {
+    printf("Usage: ./trace_parser [mode] [trace_file]\n");
+    printf("Modes:\n");
+    printf("  silent - Minimal output, only statistics and specific responses\n");
+    printf("  normal - Detailed output including bus operations and messages\n");
+}
 
 int main(int argc, char *argv[]) {
     const char *filename = DEFAULT_TRACE_FILE;
-    int debug = 0;
 
-    // Parse command-line arguments for file name and debug option
+    // Parse command-line arguments
     if (argc > 1) {
-        if (strcmp(argv[1], "--debug") == 0) {
-            debug = 1;
+        if (strcmp(argv[1], "silent") == 0) {
+            Mode = 0;
+        } else if (strcmp(argv[1], "normal") == 0) {
+            Mode = 1;
         } else {
-            filename = argv[1];
+            print_usage();
+            return -1;
         }
     }
 
-    if (argc > 2 && strcmp(argv[2], "--debug") == 0) {
-        debug = 1;
+    if (argc > 2) {
+        filename = argv[2];
+
     }
 
     // Check if the file exists
@@ -36,7 +48,12 @@ int main(int argc, char *argv[]) {
     initialize_cache();
 
     // Read and parse the trace file
-    read_trace_file(filename, debug);
+
+    read_trace_file(filename);
+
+    // Print summary statistics
+    print_summary();
+
 
     return 0;
 }
