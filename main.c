@@ -1,42 +1,51 @@
-// main.c
+#include "cache.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h> // For checking if the file exists
-#include "cache.h"
+#include <sys/stat.h>
 
-
-#define DEFAULT_TRACE_FILE "default_trace.txt"
+// Define the global file pointer for output
+FILE *output_file;
+int Mode = 0; // 0 = silent, 1 = normal
 
 int main(int argc, char *argv[]) {
-    const char *filename = DEFAULT_TRACE_FILE;
-    int debug = 0;
+    const char *filename = "rwims.din"; // Default trace file name
 
-    // Parse command-line arguments for file name and debug option
+    // Parse command-line arguments
     if (argc > 1) {
-        if (strcmp(argv[1], "--debug") == 0) {
-            debug = 1;
+        filename = argv[1]; // Use the provided trace file name
+    }
+
+    if (argc > 2) {
+        if (strcmp(argv[2], "normal") == 0) {
+            Mode = 1; // Enable normal mode
+        } else if (strcmp(argv[2], "silent") == 0) {
+            Mode = 0; // Enable silent mode
         } else {
-            filename = argv[1];
+            fprintf(stderr, "Error: Invalid mode specified. Use 'normal' or 'silent'.\n");
+            return EXIT_FAILURE;
         }
     }
 
-    if (argc > 2 && strcmp(argv[2], "--debug") == 0) {
-        debug = 1;
+    // Open the output file for logging
+    output_file = fopen("simulation_output.txt", "w");
+    if (!output_file) {
+        fprintf(stderr, "Error: Could not create output file.\n");
+        return EXIT_FAILURE;
     }
 
-    // Check if the file exists
-    struct stat buffer;
-    if (stat(filename, &buffer) != 0) {
-        fprintf(stderr, "Error: File '%s' not found.\n", filename);
-        return -1;
-    }
+    fprintf(output_file, "Starting simulation with trace file: %s\n", filename);
 
-    // Initialize cache before reading trace
+    // Initialize the cache
     initialize_cache();
 
-    // Read and parse the trace file
-    read_trace_file(filename, debug);
+    // Read and process the trace file
+    read_trace_file(filename);
+
+    fprintf(output_file, "Simulation completed successfully.\n");
+
+    // Close the output file
+    fclose(output_file);
 
     return 0;
 }
