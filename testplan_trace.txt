@@ -1,0 +1,30 @@
+# Test case for compulsory misses
+0 0x000100    # Read request from L1 data cache at address 0x000100 (compulsory miss)
+1 0x000200    # Write request from L1 data cache at address 0x000200 (compulsory miss)
+
+# Test case for cache hits
+0 0x000100    # Read request from L1 data cache at address 0x000100 (hit)
+1 0x000200    # Write request from L1 data cache at address 0x000200 (hit)
+
+# Test case for replacement policy
+0 0x001000    # Read request from L1 data cache at address 0x001000 (miss, triggers replacement in a fully occupied set)
+
+# Test case for snooping and MESI protocol
+3 0x000100    # Snooped read request for address 0x000100
+4 0x000200    # Snooped write request for address 0x000200
+5 0x001000    # Snooped read with intent to modify for address 0x001000
+6 0x002000    # Snooped invalidate command for address 0x002000
+
+# Test case for reset and printing cache state
+8              # Clear cache and reset all state
+9              # Print cache contents and state of valid cache lines
+
+# Test case for complex reads and writes
+0 0x100100    # Read request from L1 data cache at address 0x100100 (compulsory miss)
+1 0x100200    # Write request from L1 data cache at address 0x100200 (compulsory miss)
+0 0x100100    # Read request from L1 data cache at address 0x100100 (hit)
+1 0x100200    # Write request from L1 data cache at address 0x100200 (hit)
+
+# Boundary testing for cache
+0 0x7FFFFFFF  # Read request at highest possible address
+1 0x80000000  # Write request at address just beyond highest boundary (test wrap-around behavior if applicable)
