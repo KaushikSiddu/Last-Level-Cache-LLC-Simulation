@@ -1,0 +1,3 @@
+1 2002F400  # Write Miss, Transitions to Modified (M)
+1 2002F400  # Write Hit, State Remains Modified (M)
+0 2002F400  # Read After Write, Hit in Modified (M)
