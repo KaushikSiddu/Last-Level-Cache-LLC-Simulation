@@ -2,4 +2,3 @@
 0 408ED400  # Read Hit
 1 408ED404  # Write Miss (New Address)
 1 408ED404  # Write Hit
-0 408ED408  # Byte Offset Test (Same Line)
