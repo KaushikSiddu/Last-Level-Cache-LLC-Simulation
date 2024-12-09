@@ -1,4 +1,0 @@
-0 3003E000  # Read Miss, Transitions to Shared (S) or Exclusive (E)
-6 3003E000  # Snooped Invalidate Command, State Becomes Invalid (I)
-0 3003E000  # Access Invalidated Address, Miss
-1 3003E004  # Write After Invalidate, Miss, Transitions to Modified (M)
