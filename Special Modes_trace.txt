@@ -1,5 +1,0 @@
-0 60060000  # Read Request
-1 60064000  # Write Request
-9 00000000  # Print Cache Contents
-8 00000000  # Clear Cache
-9 00000000  # Print After Clear (Cache Should Be Empty)
