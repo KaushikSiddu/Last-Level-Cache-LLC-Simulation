@@ -4,12 +4,9 @@
 #define NUM_INDEXES 16384
 #define NUM_LINES_PER_INDEX 16
 #include <stdbool.h>
-<<<<<<< HEAD
 #include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
-=======
->>>>>>> main
 
 #define READ 1         /* Bus Read */
 #define WRITE 2        /* Bus Write */
@@ -17,22 +14,23 @@
 #define RWIM 4         /* Bus Read With Intent to Modify */
 
 // Snoop Result Types
-#define NOHIT 0        /* No hit */
-#define HIT 1          /* Hit */
-#define HITM 2         /* Hit to modified line */
+#define HIT 0        /* No hit */
+#define HITM 1          /* Hit */
+#define NOHIT 2         /* Hit to modified line */
 
 // L2 to L1 Message Types
 #define GETLINE 1      /* Request data for modified line in L1 */
 #define SENDLINE 2     /* Send requested cache line to L1 */
 #define INVALIDATELINE 3 /* Invalidate a line in L1 */
 #define EVICTLINE 4    /* Evict a line from L1 */
+// Declare global variables for cache statistics
+extern num_cache_reads;
+extern num_cache_writes;
+extern num_cache_hits;
+extern num_cache_misses;
 
-<<<<<<< HEAD
 extern FILE *output_file;
 extern int Mode;
-=======
-
->>>>>>> main
 // MESI states (Invalid, Modified, Exclusive, Shared)
 typedef enum {
     INVALID,
@@ -57,7 +55,7 @@ typedef struct {
 // Cache index structure (holds multiple cache lines)
 typedef struct {
     CacheLine lines[NUM_LINES_PER_INDEX]; // Multiple cache lines per index
-    unsigned short pseudo_LRU;            // 15-bit pseudo-LRU bits for the index
+    unsigned char pseudo_LRU[NUM_LINES_PER_INDEX-1];            // 15-bit pseudo-LRU bits for the index
 } CacheIndex;
 
 // Decompose address into its components
@@ -83,11 +81,8 @@ typedef enum {
 
 
 // Function prototypes
-<<<<<<< HEAD
 int parse_trace_line(const char *line, TraceEntry *entry);
 void read_trace_file(const char *filename);
-=======
->>>>>>> main
 const char *get_operation_name(int code);
 const char *get_mesi_state_name(MESIState state);
 void print_summary();
@@ -105,14 +100,10 @@ void handle_instruction_cache_read(TraceEntry *entry);
 void handle_snooped_read_request(TraceEntry *entry);
 void handle_snooped_write_request(TraceEntry *entry);
 void handle_snooped_rwim_request(TraceEntry *entry);
-<<<<<<< HEAD
 void handle_snooped_invalidate_command(TraceEntry *entry);
 void handle_clear_cache_request();
 void handle_print_cache_state_request();
 void handle_trace_entry(TraceEntry *entry);
-=======
-
->>>>>>> main
 
 #endif // CACHE_H
 
