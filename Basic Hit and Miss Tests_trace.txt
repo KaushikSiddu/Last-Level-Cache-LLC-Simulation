@@ -1,4 +1,0 @@
-0 408ED400  # Read Miss (Compulsory)
-0 408ED400  # Read Hit
-1 408ED404  # Write Miss (New Address)
-1 408ED404  # Write Hit
