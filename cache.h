@@ -4,9 +4,12 @@
 #define NUM_INDEXES 16384
 #define NUM_LINES_PER_INDEX 16
 #include <stdbool.h>
+<<<<<<< HEAD
 #include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
+=======
+>>>>>>> main
 
 #define READ 1         /* Bus Read */
 #define WRITE 2        /* Bus Write */
@@ -24,8 +27,12 @@
 #define INVALIDATELINE 3 /* Invalidate a line in L1 */
 #define EVICTLINE 4    /* Evict a line from L1 */
 
+<<<<<<< HEAD
 extern FILE *output_file;
 extern int Mode;
+=======
+
+>>>>>>> main
 // MESI states (Invalid, Modified, Exclusive, Shared)
 typedef enum {
     INVALID,
@@ -76,8 +83,11 @@ typedef enum {
 
 
 // Function prototypes
+<<<<<<< HEAD
 int parse_trace_line(const char *line, TraceEntry *entry);
 void read_trace_file(const char *filename);
+=======
+>>>>>>> main
 const char *get_operation_name(int code);
 const char *get_mesi_state_name(MESIState state);
 void print_summary();
@@ -95,10 +105,14 @@ void handle_instruction_cache_read(TraceEntry *entry);
 void handle_snooped_read_request(TraceEntry *entry);
 void handle_snooped_write_request(TraceEntry *entry);
 void handle_snooped_rwim_request(TraceEntry *entry);
+<<<<<<< HEAD
 void handle_snooped_invalidate_command(TraceEntry *entry);
 void handle_clear_cache_request();
 void handle_print_cache_state_request();
 void handle_trace_entry(TraceEntry *entry);
+=======
+
+>>>>>>> main
 
 #endif // CACHE_H
 

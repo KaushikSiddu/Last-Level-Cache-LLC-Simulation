@@ -2,8 +2,25 @@
 #include <stdio.h>
 
 
+<<<<<<< HEAD
 // The cache is an array of CacheIndex
 CacheIndex cache[NUM_INDEXES];
+=======
+void print_summary() {
+    // Example summary (replace with actual statistics)
+    printf("Simulation Summary:\n");
+    printf("  Total Reads: XX\n");
+    printf("  Total Writes: XX\n");
+    printf("  Cache Hits: XX\n");
+    printf("  Cache Misses: XX\n");
+}
+
+// The cache is an array of CacheIndex
+CacheIndex cache[NUM_INDEXES];
+CacheIndex instruction_cache[NUM_INDEXES]; // Separate instruction cache if needed
+
+extern int Mode; // 0 = silent, 1 = normal
+>>>>>>> main
 
 // Function to decompose a 32-bit address
 CacheAddress decompose_address(unsigned int address) {
@@ -46,6 +63,7 @@ void initialize_cache() {
             cache[i].lines[j].metadata = initialize_cache_metadata(); // Initialize metadata
         }
         initialize_plru_tree(&cache[i]); // Initialize the PLRU tree
+<<<<<<< HEAD
     }
 }
 
@@ -54,6 +72,15 @@ void invalidate_cache_line(CacheLine *line) {
     line->metadata.valid = 0;           // Mark as invalid
     line->metadata.dirty = 0;           // Clear the dirty bit
     line->metadata.state = INVALID;     // Set the state to INVALID
+=======
+
+        for (j = 0; j < NUM_LINES_PER_INDEX; j++) {
+            instruction_cache[i].lines[j].tag = 0;
+            instruction_cache[i].lines[j].metadata = initialize_cache_metadata();
+        }
+        initialize_plru_tree(&instruction_cache[i]);
+    }
+>>>>>>> main
 }
 
 // Function to update the PLRU tree after accessing a specific way (hit or insertion)
@@ -161,6 +188,7 @@ void PutSnoopResult(unsigned int Address, int SnoopResult) {
 
 // Simulate communication to our upper-level cache
 void MessageToCache(int Message, unsigned int Address) {
+<<<<<<< HEAD
     const char *message_type = NULL;
 
     switch (Message) {
@@ -185,6 +213,11 @@ void MessageToCache(int Message, unsigned int Address) {
         printf("L2 to L1 Message: %s, Address: 0x%08X\n", message_type, Address);
     }
     fprintf(output_file, "L2 to L1 Message: %s, Address: 0x%08X\n", message_type, Address);
+=======
+    if (Mode == 1) { // Normal mode
+        printf("L2 to L1 Message: %d, Address: 0x%08X\n", Message, Address);
+    }
+>>>>>>> main
 }
 
 void handle_read_operation(TraceEntry *entry) {
@@ -208,16 +241,24 @@ void handle_read_operation(TraceEntry *entry) {
         MESIState state = current_index->lines[hit].metadata.state;
 
         if (state == SHARED || state == EXCLUSIVE || state == MODIFIED) {
+<<<<<<< HEAD
             // Valid states do not require invalidation
+=======
+            // No bus communication for these states
+>>>>>>> main
             if (Mode == 1) {
                 printf("Cache Hit: Address 0x%08X (Index: 0x%X, Tag: 0x%X, State: %s)\n",
                        entry->address, index, tag, get_mesi_state_name(state));
             }
+<<<<<<< HEAD
             fprintf(output_file,
                     "Cache Hit: Address 0x%08X (Index: 0x%X, Tag: 0x%X, State: %s)\n",
                     entry->address, index, tag, get_mesi_state_name(state));
         } else {
             // Handle unexpected states
+=======
+        } else {
+>>>>>>> main
             printf("Error: Unexpected state on hit (address: 0x%08X, state: %s)\n",
                    entry->address, get_mesi_state_name(state));
         }
@@ -229,6 +270,7 @@ void handle_read_operation(TraceEntry *entry) {
         int snoop_result = NOHIT;
         BusOperation(READ, entry->address, &snoop_result);
 
+<<<<<<< HEAD
         // Find a way to evict using PLRU
         int eviction_way = find_eviction_way(current_index->pseudo_LRU);
 
@@ -239,6 +281,13 @@ void handle_read_operation(TraceEntry *entry) {
         current_index->lines[eviction_way].tag = tag;
         current_index->lines[eviction_way].metadata.valid = 1;
 
+=======
+        int eviction_way = find_eviction_way(current_index->pseudo_LRU);
+        current_index->lines[eviction_way].tag = tag;
+        current_index->lines[eviction_way].metadata.valid = 1;
+
+        // Transition state based on snoop result
+>>>>>>> main
         MESIState new_state;
         if (snoop_result == HIT) {
             new_state = SHARED;
@@ -248,6 +297,7 @@ void handle_read_operation(TraceEntry *entry) {
             new_state = EXCLUSIVE;
         }
         current_index->lines[eviction_way].metadata.state = new_state;
+<<<<<<< HEAD
 
         // Update PLRU after inserting the new tag
         update_plru_tree(&current_index->pseudo_LRU, eviction_way);
@@ -262,6 +312,16 @@ void handle_read_operation(TraceEntry *entry) {
     }
 }
 
+=======
+        update_plru_tree(&current_index->pseudo_LRU, eviction_way);
+
+        if (Mode == 1) { // Log only in normal mode
+            printf("Cache Miss: Address 0x%08X (Index: 0x%X, Tag: 0x%X, New State: %s)\n",
+                   entry->address, index, tag, get_mesi_state_name(new_state));
+        }
+    }
+}
+>>>>>>> main
 void handle_write_operation(TraceEntry *entry) {
     unsigned int index = entry->parsed_addr.index;
     unsigned int tag = entry->parsed_addr.tag;
@@ -292,6 +352,7 @@ void handle_write_operation(TraceEntry *entry) {
                 printf("Cache Hit (SHARED -> MODIFIED): Address 0x%08X (Index: 0x%X, Tag: 0x%X)\n",
                        entry->address, index, tag);
             }
+<<<<<<< HEAD
 
             fprintf(output_file,
                     "Operation: Write request from L1 data cache (code 1), Address: 0x%08X\n"
@@ -303,6 +364,8 @@ void handle_write_operation(TraceEntry *entry) {
                     cache_index->lines[hit].metadata.dirty,
                     "MODIFIED", cache_index->pseudo_LRU);
 
+=======
+>>>>>>> main
         } else if (state == EXCLUSIVE || state == MODIFIED) {
             // Exclusive/Modified: No bus communication
             cache_index->lines[hit].metadata.state = MODIFIED;
@@ -311,6 +374,7 @@ void handle_write_operation(TraceEntry *entry) {
                 printf("Cache Hit (EXCLUSIVE/MODIFIED): Address 0x%08X (Index: 0x%X, Tag: 0x%X)\n",
                        entry->address, index, tag);
             }
+<<<<<<< HEAD
 
             fprintf(output_file,
                     "Operation: Write request from L1 data cache (code 1), Address: 0x%08X\n"
@@ -322,6 +386,8 @@ void handle_write_operation(TraceEntry *entry) {
                     cache_index->lines[hit].metadata.dirty,
                     "MODIFIED", cache_index->pseudo_LRU);
 
+=======
+>>>>>>> main
         } else if (state == INVALID) {
             printf("Error: Invalid state on hit (address: 0x%08X, state: %s)\n",
                    entry->address, get_mesi_state_name(state));
@@ -329,20 +395,27 @@ void handle_write_operation(TraceEntry *entry) {
 
         cache_index->lines[hit].metadata.dirty = 1; // Mark as dirty
         update_plru_tree(&cache_index->pseudo_LRU, hit);
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
     } else {
         // Cache miss: Perform bus RWIM
         int snoop_result = NOHIT;
         BusOperation(RWIM, entry->address, &snoop_result);
 
         int eviction_way = find_eviction_way(cache_index->pseudo_LRU);
+<<<<<<< HEAD
         invalidate_cache_line(&cache_index->lines[eviction_way]);
+=======
+>>>>>>> main
         cache_index->lines[eviction_way].tag = tag;
         cache_index->lines[eviction_way].metadata.valid = 1;
         cache_index->lines[eviction_way].metadata.state = MODIFIED;
         cache_index->lines[eviction_way].metadata.dirty = 1; // Mark as dirty
         update_plru_tree(&cache_index->pseudo_LRU, eviction_way);
 
+<<<<<<< HEAD
         if (Mode == 1) {
             printf("Cache Miss (RWIM): Address 0x%08X (Index: 0x%X, Tag: 0x%X, State: MODIFIED)\n",
                    entry->address, index, tag);
@@ -361,6 +434,15 @@ void handle_write_operation(TraceEntry *entry) {
 }
 
 
+=======
+        if (Mode == 1) { // Log only in normal mode
+            printf("Cache Miss (RWIM): Address 0x%08X (Index: 0x%X, Tag: 0x%X, State: MODIFIED)\n",
+                   entry->address, index, tag);
+        }
+    }
+}
+
+>>>>>>> main
 void handle_instruction_cache_read(TraceEntry *entry) {
     unsigned int index = entry->parsed_addr.index;
     unsigned int tag = entry->parsed_addr.tag;
@@ -374,11 +456,14 @@ void handle_instruction_cache_read(TraceEntry *entry) {
                entry->address, index, tag);
     }
 
+<<<<<<< HEAD
     fprintf(output_file,
             "Operation: Read request from L1 instruction cache (code 2), Address: 0x%08X\n"
             "  Decomposed Address: Byte Offset=0x%X, Index=0x%X, Tag=0x%X\n",
             entry->address, entry->parsed_addr.byte_offset, index, tag);
 
+=======
+>>>>>>> main
     // Check for a hit
     int i;
     for (i = 0; i < NUM_LINES_PER_INDEX; i++) {
@@ -398,6 +483,7 @@ void handle_instruction_cache_read(TraceEntry *entry) {
                 printf("Instruction Cache Hit: Address 0x%08X (Index: 0x%X, Tag: 0x%X, State: %s)\n",
                        entry->address, index, tag, get_mesi_state_name(state));
             }
+<<<<<<< HEAD
 
             fprintf(output_file,
                     "  Cache Hit: Metadata: Valid=%d, Dirty=%d, MESI State=%s\n"
@@ -406,6 +492,8 @@ void handle_instruction_cache_read(TraceEntry *entry) {
                     current_index->lines[hit].metadata.dirty,
                     get_mesi_state_name(state),
                     current_index->pseudo_LRU);
+=======
+>>>>>>> main
         } else {
             printf("Error: Unexpected state on hit (address: 0x%08X, state: %s)\n",
                    entry->address, get_mesi_state_name(state));
@@ -413,14 +501,20 @@ void handle_instruction_cache_read(TraceEntry *entry) {
 
         // Update PLRU for this line
         update_plru_tree(&current_index->pseudo_LRU, hit);
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
     } else {
         // Cache miss: Perform bus read
         int snoop_result = NOHIT;
         BusOperation(READ, entry->address, &snoop_result);
 
         int eviction_way = find_eviction_way(current_index->pseudo_LRU);
+<<<<<<< HEAD
         invalidate_cache_line(&current_index->lines[eviction_way]);
+=======
+>>>>>>> main
         current_index->lines[eviction_way].tag = tag;
         current_index->lines[eviction_way].metadata.valid = 1;
 
@@ -436,6 +530,7 @@ void handle_instruction_cache_read(TraceEntry *entry) {
         current_index->lines[eviction_way].metadata.state = new_state;
         update_plru_tree(&current_index->pseudo_LRU, eviction_way);
 
+<<<<<<< HEAD
         // Log the miss in normal mode
         if (Mode == 1) {
             printf("Instruction Cache Miss: Address 0x%08X (Index: 0x%X, Tag: 0x%X, New State: %s)\n",
@@ -450,6 +545,12 @@ void handle_instruction_cache_read(TraceEntry *entry) {
                 current_index->lines[eviction_way].metadata.dirty,
                 get_mesi_state_name(new_state),
                 current_index->pseudo_LRU);
+=======
+        if (Mode == 1) { // Log only in normal mode
+            printf("Instruction Cache Miss: Address 0x%08X (Index: 0x%X, Tag: 0x%X, New State: %s)\n",
+                   entry->address, index, tag, get_mesi_state_name(new_state));
+        }
+>>>>>>> main
     }
 }
 
@@ -460,17 +561,23 @@ void handle_snooped_read_request(TraceEntry *entry) {
     CacheIndex *current_index = &cache[index];
     int line_found = -1; // Index of the matching line, -1 if not found
 
+<<<<<<< HEAD
     // Log the snooped read request in both modes
+=======
+>>>>>>> main
     if (Mode == 1) {
         printf("Snooped Read Request: Address 0x%08X (Index: 0x%X, Tag: 0x%X)\n", 
                entry->address, index, tag);
     }
+<<<<<<< HEAD
     fprintf(output_file,
             "Operation: Snooped read request (code 3), Address: 0x%08X\n"
             "  Decomposed Address: Byte Offset=0x%X, Index=0x%X, Tag=0x%X\n",
             entry->address, entry->parsed_addr.byte_offset, index, tag);
 
     // Search for the matching cache line
+=======
+>>>>>>> main
     int i;
     for (i = 0; i < NUM_LINES_PER_INDEX; i++) {
         if (current_index->lines[i].metadata.valid && current_index->lines[i].tag == tag) {
@@ -489,6 +596,7 @@ void handle_snooped_read_request(TraceEntry *entry) {
             if (Mode == 1) {
                 printf("Snooped Read: MODIFIED -> SHARED (Write-back to memory).\n");
             }
+<<<<<<< HEAD
 
             fprintf(output_file,
                     "  Snoop Result: MODIFIED -> SHARED (Write-back to memory).\n"
@@ -498,12 +606,15 @@ void handle_snooped_read_request(TraceEntry *entry) {
                     get_mesi_state_name(line->metadata.state),
                     current_index->pseudo_LRU);
 
+=======
+>>>>>>> main
         } else if (state == EXCLUSIVE) {
             line->metadata.state = SHARED;
 
             if (Mode == 1) {
                 printf("Snooped Read: EXCLUSIVE -> SHARED.\n");
             }
+<<<<<<< HEAD
 
             fprintf(output_file,
                     "  Snoop Result: EXCLUSIVE -> SHARED.\n"
@@ -513,10 +624,13 @@ void handle_snooped_read_request(TraceEntry *entry) {
                     get_mesi_state_name(line->metadata.state),
                     current_index->pseudo_LRU);
 
+=======
+>>>>>>> main
         } else if (state == SHARED) {
             if (Mode == 1) {
                 printf("Snooped Read: Already in SHARED state. No action needed.\n");
             }
+<<<<<<< HEAD
 
             fprintf(output_file,
                     "  Snoop Result: Already in SHARED state. No action needed.\n"
@@ -552,6 +666,17 @@ void handle_snooped_read_request(TraceEntry *entry) {
     }
 }
 
+=======
+        } else if (state == INVALID) {
+            if (Mode == 1) {
+                printf("Snooped Read: Line in INVALID state. No action needed.\n");
+            }
+        }
+    } else if (Mode == 1) {
+        printf("Snooped Read: Line not present in cache. No action needed.\n");
+    }
+}
+>>>>>>> main
 void handle_snooped_write_request(TraceEntry *entry) {
     unsigned int index = entry->parsed_addr.index;
     unsigned int tag = entry->parsed_addr.tag;
@@ -559,17 +684,23 @@ void handle_snooped_write_request(TraceEntry *entry) {
     CacheIndex *current_index = &cache[index];
     int line_found = -1; // Index of the matching line, -1 if not found
 
+<<<<<<< HEAD
     // Log the snooped write request in both modes
+=======
+>>>>>>> main
     if (Mode == 1) {
         printf("Snooped Write Request: Address 0x%08X (Index: 0x%X, Tag: 0x%X)\n", 
                entry->address, index, tag);
     }
+<<<<<<< HEAD
     fprintf(output_file,
             "Operation: Snooped write request (code 4), Address: 0x%08X\n"
             "  Decomposed Address: Byte Offset=0x%X, Index=0x%X, Tag=0x%X\n",
             entry->address, entry->parsed_addr.byte_offset, index, tag);
 
     // Search for the matching cache line
+=======
+>>>>>>> main
     int i;
     for (i = 0; i < NUM_LINES_PER_INDEX; i++) {
         if (current_index->lines[i].metadata.valid && current_index->lines[i].tag == tag) {
@@ -583,6 +714,7 @@ void handle_snooped_write_request(TraceEntry *entry) {
         MESIState state = line->metadata.state;
 
         if (state == MODIFIED) {
+<<<<<<< HEAD
             // Transition MODIFIED -> INVALID and write back to memory
             invalidate_cache_line(line); // Invalidate the line
             if (Mode == 1) {
@@ -644,6 +776,32 @@ void handle_snooped_write_request(TraceEntry *entry) {
         }
         fprintf(output_file,
                 "  Snoop Result: Line not present in cache. No action needed.\n");
+=======
+            line->metadata.state = INVALID;
+
+            if (Mode == 1) {
+                printf("Snooped Write: MODIFIED -> INVALID (Write-back to memory).\n");
+            }
+        } else if (state == SHARED) {
+            line->metadata.state = INVALID;
+
+            if (Mode == 1) {
+                printf("Snooped Write: SHARED -> INVALID.\n");
+            }
+        } else if (state == INVALID) {
+            if (Mode == 1) {
+                printf("Snooped Write: Line already in INVALID state. No action needed.\n");
+            }
+        } else if (state == EXCLUSIVE) {
+            line->metadata.state = INVALID;
+
+            if (Mode == 1) {
+                printf("Snooped Write: EXCLUSIVE -> INVALID.\n");
+            }
+        }
+    } else if (Mode == 1) {
+        printf("Snooped Write: Line not present in cache. No action needed.\n");
+>>>>>>> main
     }
 }
 
@@ -654,17 +812,23 @@ void handle_snooped_rwim_request(TraceEntry *entry) {
     CacheIndex *current_index = &cache[index];
     int line_found = -1; // Index of the matching line, -1 if not found
 
+<<<<<<< HEAD
     // Log the snooped RWIM request in both modes
+=======
+>>>>>>> main
     if (Mode == 1) {
         printf("Snooped RWIM Request: Address 0x%08X (Index: 0x%X, Tag: 0x%X)\n", 
                entry->address, index, tag);
     }
+<<<<<<< HEAD
     fprintf(output_file,
             "Operation: Snooped RWIM request (code 5), Address: 0x%08X\n"
             "  Decomposed Address: Byte Offset=0x%X, Index=0x%X, Tag=0x%X\n",
             entry->address, entry->parsed_addr.byte_offset, index, tag);
 
     // Search for the matching cache line
+=======
+>>>>>>> main
     int i;
     for (i = 0; i < NUM_LINES_PER_INDEX; i++) {
         if (current_index->lines[i].metadata.valid && current_index->lines[i].tag == tag) {
@@ -678,6 +842,7 @@ void handle_snooped_rwim_request(TraceEntry *entry) {
         MESIState state = line->metadata.state;
 
         if (state == MODIFIED) {
+<<<<<<< HEAD
             // Transition MODIFIED -> INVALID and write back to memory
             invalidate_cache_line(line); // Invalidate the line
             if (Mode == 1) {
@@ -878,3 +1043,26 @@ void handle_print_cache_state_request() {
     fprintf(output_file, "Cache state printed successfully.\n\n");
 }
 
+=======
+            line->metadata.state = INVALID;
+
+            if (Mode == 1) {
+                printf("Snooped RWIM: MODIFIED -> INVALID (Write-back to memory).\n");
+            }
+        } else if (state == SHARED || state == EXCLUSIVE) {
+            line->metadata.state = INVALID;
+
+            if (Mode == 1) {
+                printf("Snooped RWIM: SHARED/EXCLUSIVE -> INVALID.\n");
+            }
+        } else if (state == INVALID) {
+            if (Mode == 1) {
+                printf("Snooped RWIM: Line already in INVALID state. No action needed.\n");
+            }
+        }
+    } else if (Mode == 1) {
+        printf("Snooped RWIM: Line not present in cache. No action needed.\n");
+    }
+}
+
+>>>>>>> main
