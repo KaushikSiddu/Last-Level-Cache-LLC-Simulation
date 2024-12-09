@@ -1,5 +1,0 @@
-0 1001D940  # Command 0: Read Miss (Shared or Exclusive)
-0 1001D940  # Command 0: Read Hit
-2 1001D944  # Command 2: Instruction Cache Read, Miss (Exclusive)
-2 1001D944  # Command 2: Instruction Cache Read, Hit
-0 1001D948  # Different Byte Offset, State Unchanged
