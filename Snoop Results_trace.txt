@@ -1,0 +1,4 @@
+0 4004C000  # Read Request, Transitions to Exclusive (E)
+5 4004C000  # Snooped Read with Intent to Modify, Other Caches Invalidate
+3 4004C000  # Flush on Bus Read for Modified (M), Transitions to Shared (S)
+5 4004C000  # Snooped BusRdX, Modified Line Becomes Invalid (I)
