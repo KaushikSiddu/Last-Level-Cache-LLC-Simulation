@@ -776,6 +776,57 @@ void handle_snooped_read_request(TraceEntry *entry) {
 }
 
 void handle_snooped_write_request(TraceEntry *entry) {
+    unsigned int index = entry->parsed_addr.index;
+    unsigned int tag = entry->parsed_addr.tag;
+
+    CacheIndex *current_index = &cache[index];
+    int line_found = -1; // Index of the matching line, -1 if not found
+
+    // Search for the matching cache line
+    int i;
+    for (i = 0; i < NUM_LINES_PER_INDEX; i++) {
+        if (current_index->lines[i].metadata.valid && current_index->lines[i].tag == tag) {
+            line_found = i;
+            break;
+        }
+    }
+
+    if (line_found != -1) {
+        // Line is present in the cache
+        CacheLine *line = &current_index->lines[line_found];
+        MESIState state = line->metadata.state;
+
+        if (state == MODIFIED || state == EXCLUSIVE || state == SHARED) {
+            // Throw an error if the state is invalid for a bus write
+            fprintf(stderr, "Error: Invalid MESI state (%s) for bus write operation (Address: 0x%08X)\n",
+                    get_mesi_state_name(state), entry->address);
+            fprintf(output_file, "Error: Invalid MESI state (%s) for bus write operation (Address: 0x%08X)\n",
+                    get_mesi_state_name(state), entry->address);
+
+            if (Mode == 1) {
+                printf("Error: Invalid MESI state (%s) for bus write operation (Address: 0x%08X)\n",
+                       get_mesi_state_name(state), entry->address);
+            }
+        } else if (state == INVALID) {
+            // If the state is INVALID, no action is required
+            if (Mode == 1) {
+                printf("Snooped Write: Line already in INVALID state. No action needed (Address: 0x%08X).\n",
+                       entry->address);
+            }
+            fprintf(output_file,
+                    "Snooped Write: Line already in INVALID state. No action needed (Address: 0x%08X).\n",
+                    entry->address);
+        }
+    } else {
+        // Line not present in cache
+        if (Mode == 1) {
+            printf("Snooped Write: Line not present in cache. No action needed (Address: 0x%08X).\n",
+                   entry->address);
+        }
+        fprintf(output_file,
+                "Snooped Write: Line not present in cache. No action needed (Address: 0x%08X).\n",
+                entry->address);
+    }
 }
 
 void handle_snooped_rwim_request(TraceEntry *entry) {
